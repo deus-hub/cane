@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\UserController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -14,6 +15,26 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
-    return $request->user();
+// Route::prefix('auth')->post('/register', function (Request $request) {
+//     return 'working';
+// });
+Route::prefix('auth')->group( function() {
+    Route::post('/register', [UserController::class, 'store'])->name('register');
+    Route::post('/login', [UserController::class, 'login'])->name('login');
+    Route::get('/resend/{id}', [UserController::class, 'resendOTP'])->name('resend-otp');
+    Route::post('/verify_email', [UserController::class, 'VerifyEmail'])->name('verify_email');
+    Route::post('/send-reset-token', [UserController::class, 'SendResetToken'])->name('request_password_reset');
+    Route::post('/reset-password', [UserController::class, 'ResetPassword'])->name('reset_password');
+
+});
+// Route::middleware('auth:api')->prefix('auth')->group(function ($router) {
+// Route::prefix('auth')->group(['middleware' => ['auth:sanctum']], function () {
+//     Route::post('/logout', [UserController::class, 'logout'])->name('logout');
+// });
+
+Route::prefix('auth')->middleware('auth:sanctum')->group( function () {
+    Route::post('/logout', [UserController::class, 'logout'])->name('logout');
+    Route::get('/profile', [UserController::class, 'profile'])->name('profile');
+    Route::post('/update-profile', [UserController::class, 'UpdateProfile'])->name('update_profile');
+    Route::post('/change-password', [UserController::class, 'ChangePassword'])->name('change_password');
 });
