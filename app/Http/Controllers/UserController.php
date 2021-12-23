@@ -24,16 +24,15 @@ class UserController extends Controller
 
         if ($user) {
             return response()->json([
-                'status'=>'true', 
+                'status' => 'true',
                 'user' => $user
             ], 200);
         } else {
             return response()->json(
-                ['status'=>'false', 'message' => 'user not found'], 404
+                ['status' => 'false', 'message' => 'user not found'],
+                404
             );
-
         }
-        
     }
 
     /**
@@ -55,7 +54,8 @@ class UserController extends Controller
 
         if (!$user) {
             return response()->json(
-                ['status'=>'false', 'message' => 'user not found'], 404
+                ['status' => 'false', 'message' => 'user not found'],
+                404
             );
         }
 
@@ -68,14 +68,14 @@ class UserController extends Controller
 
         if ($query) {
             return response()->json([
-                'status'=>'true', 
+                'status' => 'true',
                 'message' => 'user profile updated successfully'
             ], 200);
         } else {
             return response()->json(
-                ['status'=>'false', 'message' => 'profile update failed'], 200
+                ['status' => 'false', 'message' => 'profile update failed'],
+                200
             );
-
         }
     }
 
@@ -89,15 +89,16 @@ class UserController extends Controller
         $fields = $request->validate([
             'email' => 'required|email'
         ]);
-        
+
         $user = User::where('email', $fields['email'])->first();
 
         if (!$user) {
             return response()->json(
-                ['status'=>'false', 'message' => 'user not found'], 404
+                ['status' => 'false', 'message' => 'user not found'],
+                404
             );
         }
-        
+
         if (!empty($user->otp)) {
             $otp = $user->otp;
         } else {
@@ -110,15 +111,16 @@ class UserController extends Controller
 
         Mail::to($user->email)->send(new PasswordResetOTP($otp));
 
-        if( !count(Mail::failures())) {
+        if (!count(Mail::failures())) {
             return response()->json([
-                'status'=>'true',
+                'status' => 'true',
                 'message' => "otp sent to $user->email ",
                 'otp' => $otp
             ], 200);
         } else {
             return response()->json(
-                ['status'=>'false', 'message' => 'unable to send mail'], 200
+                ['status' => 'false', 'message' => 'unable to send mail'],
+                200
             );
         }
     }
@@ -134,9 +136,9 @@ class UserController extends Controller
         auth()->user()->tokens()->delete();
 
         return response()->json(
-            ['status'=>'true', 'message' => 'user has been logged out successfully'], 200
+            ['status' => 'true', 'message' => 'user has been logged out successfully'],
+            200
         );
-
     }
 
     /**
@@ -162,9 +164,10 @@ class UserController extends Controller
 
         Mail::to($fields['email'])->send(new VerifyEmail($otp));
 
-        if( count(Mail::failures()) > 0 ) {
+        if (count(Mail::failures()) > 0) {
             return response()->json(
-                ['status'=>'false', 'message' => 'unable to send mail'], 200
+                ['status' => 'false', 'message' => 'unable to send mail'],
+                200
             );
         }
 
@@ -181,15 +184,15 @@ class UserController extends Controller
 
         if ($user) {
             return response()->json([
-                'status'=>'true', 
+                'status' => 'true',
                 'message' => "otp sent to $userEmail ",
                 'user' => $user
             ], 200);
         } else {
             return response()->json(
-                ['status'=>'false', 'message' => 'account not created'], 200
+                ['status' => 'false', 'message' => 'account not created'],
+                200
             );
-
         }
     }
 
@@ -220,15 +223,18 @@ class UserController extends Controller
             ]);
 
             return response()->json(
-                ['status'=>'true', 'message' => 'user password changed successfully'], 200
+                ['status' => 'true', 'message' => 'user password changed successfully'],
+                200
             );
         } else {
             return response()->json(
-                ['status'=>'false', 'message' => 'passwords do not match'], 200
+                ['status' => 'false', 'message' => 'passwords do not match'],
+                200
             );
         }
         return response()->json(
-            ['status'=>'false', 'message' => 'password change failed'], 200
+            ['status' => 'false', 'message' => 'password change failed'],
+            200
         );
     }
 
@@ -252,14 +258,15 @@ class UserController extends Controller
         // check if user exists
         if (!$user) {
             return response()->json(
-                ['status'=>'false', 'message' => 'user does not exist'], 200
+                ['status' => 'false', 'message' => 'user does not exist'],
+                200
             );
         }
 
         // check if user exists
         if (!empty($user->otp)) {
             return response()->json([
-                'status'=>'false',
+                'status' => 'false',
                 'message' => 'mail not verified',
                 'user' => $user->id
             ], 200);
@@ -268,7 +275,8 @@ class UserController extends Controller
         // check if passwor provided matches the on in the database
         if (!Hash::check($fields['password'], $user->password)) {
             return response()->json(
-                ['status'=>'false', 'message' => 'incorrect password'], 200
+                ['status' => 'false', 'message' => 'incorrect password'],
+                200
             );
         }
 
@@ -277,15 +285,15 @@ class UserController extends Controller
 
         if ($token) {
             return response()->json([
-                'status'=>'true', 
+                'status' => 'true',
                 'user' => $user,
                 'token' => $token
             ], 200);
         } else {
             return response()->json(
-                ['status'=>'false', 'message' => ' login unsucessful'], 200
+                ['status' => 'false', 'message' => ' login unsucessful'],
+                200
             );
-
         }
     }
 
@@ -301,26 +309,25 @@ class UserController extends Controller
 
         $user = User::where('id', $id)->first();
 
-        if(!$user){
-            return response()->json(['status'=>'false', 'error'=>'user does not exist'], 404);
+        if (!$user) {
+            return response()->json(['status' => 'false', 'error' => 'user does not exist'], 404);
         }
 
         $otp = $user->otp;
         Mail::to($user->email)->send(new VerifyEmail($otp));
 
-        if( count(Mail::failures()) > 0 ) {
+        if (count(Mail::failures()) > 0) {
             return response()->json(
-                ['status'=>'false', 'message' => 'unable to send mail'], 200
+                ['status' => 'false', 'message' => 'unable to send mail'],
+                200
             );
         } else {
             return response()->json([
-                'status'=>'true', 
+                'status' => 'true',
                 'message' => "otp sent to $user->email ",
                 'user' => $user
             ], 200);
         }
-
-        
     }
 
     /**
@@ -336,28 +343,27 @@ class UserController extends Controller
 
         $user = User::where('otp', $fields['otp'])->first();
 
-        if(!$user){
-            return response()->json(['status'=>'false', 'error'=>'invalid otp'], 404);
+        if (!$user) {
+            return response()->json(['status' => 'false', 'error' => 'invalid otp'], 404);
         }
 
         // $otp = $user->otp;
-        
+
         $query = $user->update([
             'otp' => ''
         ]);
 
-        if( !$query ) {
+        if (!$query) {
             return response()->json(
-                ['status'=>'false', 'message' => 'unable to verify email'], 200
+                ['status' => 'false', 'message' => 'unable to verify email'],
+                200
             );
         } else {
             return response()->json([
-                'status'=>'true', 
+                'status' => 'true',
                 'message' => "email verified successfully"
             ], 200);
         }
-
-        
     }
 
     /**
@@ -376,29 +382,28 @@ class UserController extends Controller
 
         $user = User::where('otp', $fields['otp'])->first();
 
-        if(!$user){
-            return response()->json(['status'=>'false', 'error'=>'invalid otp'], 404);
+        if (!$user) {
+            return response()->json(['status' => 'false', 'error' => 'invalid otp'], 404);
         }
 
         $newPassword = bcrypt($fields['password']);
-        
+
         $query = $user->update([
             'otp' => '',
             'password' => $newPassword
         ]);
 
-        if( !$query ) {
+        if (!$query) {
             return response()->json(
-                ['status'=>'false', 'message' => 'unable to reset password'], 200
+                ['status' => 'false', 'message' => 'unable to reset password'],
+                200
             );
         } else {
             return response()->json([
-                'status'=>'true', 
+                'status' => 'true',
                 'message' => "password reset was successful"
             ], 200);
         }
-
-        
     }
 
     /**
