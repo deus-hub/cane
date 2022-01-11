@@ -22,6 +22,10 @@ class CreateUsersTable extends Migration
             $table->timestamp('email_verified_at')->nullable();
             $table->string('password');
             $table->string('otp')->nullabel();
+            $table->string('BVN')->nullable();
+            $table->string('bank')->nullable();
+            $table->string('account_number')->nullable();
+            $table->string('pension_program')->nullable();
             $table->rememberToken();
             $table->timestamps();
         });

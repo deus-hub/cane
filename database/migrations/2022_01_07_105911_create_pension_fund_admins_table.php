@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateBvnsTable extends Migration
+class CreatePensionFundAdminsTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,10 +13,9 @@ class CreateBvnsTable extends Migration
      */
     public function up()
     {
-        Schema::create('bvns', function (Blueprint $table) {
+        Schema::create('pension_fund_admins', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('user_id')->constrained()->onDelete('cascade')->onUpdate('cascade');
-            $table->string('BVN');
+            $table->string('name');
             $table->timestamps();
         });
     }
@@ -28,6 +27,6 @@ class CreateBvnsTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('bvns');
+        Schema::dropIfExists('pension_fund_admins');
     }
 }

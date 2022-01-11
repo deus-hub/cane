@@ -5,16 +5,11 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class Bvn extends Model
+class PensionFundAdmin extends Model
 {
     use HasFactory;
 
     protected $fillable = [
-        'user_id', 'BVN',
+        'name'
     ];
-
-    public function user()
-    {
-        return $this->belongsTo(User::class);
-    }
 }

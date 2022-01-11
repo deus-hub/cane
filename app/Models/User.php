@@ -24,6 +24,10 @@ class User extends Authenticatable
         'phone',
         'password',
         'otp',
+        'BVN',
+        'bank',
+        'account_number',
+        'pension_program'
     ];
 
     /**
@@ -44,25 +48,4 @@ class User extends Authenticatable
     protected $casts = [
         'email_verified_at' => 'datetime',
     ];
-
-    public function account()
-    {
-        return $this->hasMany(Account::class);
-    }
-    public function bvn()
-    {
-        return $this->hasMany(Bvn::class);
-    }
-    public function bank()
-    {
-        return $this->hasMany(Bank::class);
-    }
-    public function account_number()
-    {
-        return $this->hasMany(AccountNumber::class);
-    }
-    public function program()
-    {
-        return $this->hasMany(PensionProgram::class);
-    }
 }

@@ -45,9 +45,13 @@ class UserController extends Controller
     {
         //create a new user
         $fields = $request->validate([
-            'firstname' => 'required|string',
-            'lastname' => 'required|string',
-            'phone' => 'required|regex:/^([0-9\s\-\+\(\)]*)$/|min:11'
+            'firstname'             => 'required|string',
+            'lastname'              => 'required|string',
+            'phone'                 => 'required|regex:/^([0-9\s\-\+\(\)]*)$/|min:11',
+            'BVN'                   => 'required|numeric',
+            'bank'                  => 'required|string',
+            'account_number'        => 'required|numeric',
+            'pension_program'       => 'required|string'
         ]);
 
         $user = auth()->user();
@@ -60,9 +64,12 @@ class UserController extends Controller
         }
 
         $query = $user->update([
-            'firstname' => $fields['firstname'],
-            'lastname' => $fields['lastname'],
-            'phone' => $fields['phone']
+            'firstname'         => $fields['firstname'],
+            'lastname'          => $fields['lastname'],
+            'phone'             => $fields['phone'],
+            'BVN'               => $fields['BVN'],
+            'account_number'    => $fields['account_number'],
+            'pension_program'   => $fields['pension_program']
         ]);
 
 
