@@ -3,6 +3,7 @@
 use App\Http\Controllers\BankController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\PensionFundAdminController;
+use App\Http\Controllers\YoaPensionController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -50,4 +51,14 @@ Route::prefix('pfa')->middleware('auth:sanctum')->group(function () {
     Route::get('/{id}', [PensionFundAdminController::class, 'edit']);
     Route::post('/update', [PensionFundAdminController::class, 'update']);
     Route::get('/delete/{id}', [PensionFundAdminController::class, 'destroy']);
+});
+
+Route::prefix('yoa')->middleware('auth:sanctum')->group(function () {
+    // PFA CRUD
+    Route::get('/get-active-products', [YoaPensionController::class, 'index']);
+    Route::post('/quote/all-risk', [YoaPensionController::class, 'AllRiskQuote']);
+    Route::post('/quote/motor-insurance', [YoaPensionController::class, 'MotorInsurance']);
+    Route::post('/quote/home-owners-and-household-insurance', [YoaPensionController::class, 'GroupHomeOwnersInsurance']);
+    Route::post('/quote/home-owners-insurance', [YoaPensionController::class, 'HomeOwnersInsurance']);
+    Route::post('/quote/pay-quote', [YoaPensionController::class, 'PayQuote']);
 });
