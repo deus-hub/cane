@@ -1,8 +1,14 @@
 <?php
 
 use App\Http\Controllers\BankController;
+use App\Http\Controllers\DippReactionController;
+use App\Http\Controllers\InitialWithdrawalController;
+use App\Http\Controllers\InvestmentObjectiveController;
+use App\Http\Controllers\InvestmentQuestionnaireController;
+use App\Http\Controllers\InvestmentRelianceController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\PensionFundAdminController;
+use App\Http\Controllers\PercentageWithdrawalController;
 use App\Http\Controllers\YoaPensionController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
@@ -61,4 +67,14 @@ Route::prefix('yoa')->middleware('auth:sanctum')->group(function () {
     Route::post('/quote/home-owners-and-household-insurance', [YoaPensionController::class, 'GroupHomeOwnersInsurance']);
     Route::post('/quote/home-owners-insurance', [YoaPensionController::class, 'HomeOwnersInsurance']);
     Route::post('/quote/pay-quote', [YoaPensionController::class, 'PayQuote']);
+});
+
+Route::prefix('survey')->group(function () {
+    // SURVEY QUESTIONS
+    Route::get('/percentage-withdrawal', [PercentageWithdrawalController::class, 'index']);
+    Route::get('/investment-objective', [InvestmentObjectiveController::class, 'index']);
+    Route::get('/expected-initial-withdrawal', [InitialWithdrawalController::class, 'index']);
+    Route::get('/investment-income-reliance', [InvestmentRelianceController::class, 'index']);
+    Route::get('/dipp-reaction', [DippReactionController::class, 'index']);
+    Route::post('/answers', [InvestmentQuestionnaireController::class, 'index']);
 });
