@@ -39,6 +39,30 @@ class YoaPensionController extends Controller
     /**
      * Display a listing of the resource.
      *
+     * @return \Illuminate\Http\Response
+     */
+    public function GetDetails($quoteNumber)
+    {
+        //get active products
+        $productDetails = Http::withHeaders([
+            'UserIdentity' => config('services.yoa.token'),
+            'Accept' => 'Application/json',
+        ])
+            ->get(config('services.yoa.base_url') . '/api/Integration/GetQuoteStatus?quoteNumber=' . $quoteNumber)
+            ->json();
+
+        return response()->json(
+            [
+                'status' => 'true',
+                'ProductDetails' => $productDetails,
+            ],
+            200
+        );
+    }
+
+    /**
+     * Display a listing of the resource.
+     *
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */

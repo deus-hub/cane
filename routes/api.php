@@ -67,6 +67,7 @@ Route::prefix('yoa')->middleware('auth:sanctum')->group(function () {
     Route::post('/quote/home-owners-and-household-insurance', [YoaPensionController::class, 'GroupHomeOwnersInsurance']);
     Route::post('/quote/home-owners-insurance', [YoaPensionController::class, 'HomeOwnersInsurance']);
     Route::post('/quote/pay-quote', [YoaPensionController::class, 'PayQuote']);
+    Route::get('/policy/get-details/{quoteNumber}', [YoaPensionController::class, 'GetDetails'])->where('quoteNumber', '(.*)');
 });
 
 Route::prefix('survey')->group(function () {
