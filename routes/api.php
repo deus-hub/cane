@@ -61,7 +61,6 @@ Route::prefix('pfa')->middleware('auth:sanctum')->group(function () {
 });
 
 Route::prefix('yoa')->middleware('auth:sanctum')->group(function () {
-    // PFA CRUD
     Route::get('/get-active-products', [YoaPensionController::class, 'index']);
     Route::post('/quote/all-risk', [YoaPensionController::class, 'AllRiskQuote']);
     Route::post('/quote/motor-insurance', [YoaPensionController::class, 'MotorInsurance']);
@@ -72,10 +71,12 @@ Route::prefix('yoa')->middleware('auth:sanctum')->group(function () {
 });
 
 Route::prefix('naya')->middleware('auth:sanctum')->group(function () {
-    // PFA CRUD
     Route::get('/get-state-codes', [NayaCapitalController::class, 'GetStateCodes']);
     Route::get('/get-bank-codes', [NayaCapitalController::class, 'GetBankCodes']);
     Route::post('/get-lga-codes', [NayaCapitalController::class, 'GetLgaCodes']);
+    Route::post('/kyc', [NayaCapitalController::class, 'KycInformation']);
+    Route::post('/kyc-account-status', [NayaCapitalController::class, 'KycAccStatus']);
+    Route::post('/make-order', [NayaCapitalController::class, 'MakeOrder']);
 });
 
 Route::prefix('survey')->group(function () {
