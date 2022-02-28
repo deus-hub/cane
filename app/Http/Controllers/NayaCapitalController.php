@@ -87,21 +87,15 @@ class NayaCapitalController extends Controller
             "stateRefno"    => $fields['state_ref']
         ];
 
-        // return $payload;
 
-        // try {
-        //     $response = Http::acceptJson()->post(config('services.naya.base_url') . '/sbconnect.svc/utils_nigerianlgas', $payload);
-        // } catch (\Exception $e) {
-        //     abort(503);
-        // }
-        // return response()->json(
-        //     [
-        //         json_decode($response),
-        //     ],
-        //     200
-        // );
-
-        $response = Http::acceptJson()->post(config('services.naya.base_url') . '/sbconnect.svc/utils_nigerianlgas', $payload);
+        $response = Http::withHeaders([
+            'Accept' => 'multipart/form-data',
+            'Content-type' => 'multipart/form-data'
+        ])
+            ->post(
+                config('services.naya.base_url') . '/sbconnect.svc/utils_nigerianlgas',
+                $payload
+            );
         if ($response->successful()) {
             return response()->json(
                 [
