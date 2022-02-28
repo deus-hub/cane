@@ -6,6 +6,7 @@ use App\Http\Controllers\InitialWithdrawalController;
 use App\Http\Controllers\InvestmentObjectiveController;
 use App\Http\Controllers\InvestmentQuestionnaireController;
 use App\Http\Controllers\InvestmentRelianceController;
+use App\Http\Controllers\NayaCapitalController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\PensionFundAdminController;
 use App\Http\Controllers\PercentageWithdrawalController;
@@ -68,6 +69,13 @@ Route::prefix('yoa')->middleware('auth:sanctum')->group(function () {
     Route::post('/quote/home-owners-insurance', [YoaPensionController::class, 'HomeOwnersInsurance']);
     Route::post('/quote/pay-quote', [YoaPensionController::class, 'PayQuote']);
     Route::get('/policy/get-details/{quoteNumber}', [YoaPensionController::class, 'GetDetails'])->where('quoteNumber', '(.*)');
+});
+
+Route::prefix('naya')->middleware('auth:sanctum')->group(function () {
+    // PFA CRUD
+    Route::get('/get-state-codes', [NayaCapitalController::class, 'GetStateCodes']);
+    Route::get('/get-bank-codes', [NayaCapitalController::class, 'GetBankCodes']);
+    Route::post('/get-lga-codes', [NayaCapitalController::class, 'GetLgaCodes']);
 });
 
 Route::prefix('survey')->group(function () {

@@ -32,7 +32,12 @@ return [
 
     'yoa' => [
         'token' => env('YOA_TOKEN'),
-        'base_url' => env('BASE_URL'),
+        'base_url' => env('YOA_BASE_URL'),
+    ],
+
+    'naya' => [
+        'ncpid' => env('NAYA_NCPID'),
+        'base_url' => env('NAYA_BASE_URL'),
     ],
 
 ];
