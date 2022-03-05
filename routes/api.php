@@ -73,10 +73,25 @@ Route::prefix('yoa')->middleware('auth:sanctum')->group(function () {
 Route::prefix('naya')->middleware('auth:sanctum')->group(function () {
     Route::get('/get-state-codes', [NayaCapitalController::class, 'GetStateCodes']);
     Route::get('/get-bank-codes', [NayaCapitalController::class, 'GetBankCodes']);
+    Route::get('/get-kyc-information', [NayaCapitalController::class, 'GetKycInformation']);
     Route::post('/get-lga-codes', [NayaCapitalController::class, 'GetLgaCodes']);
     Route::post('/kyc', [NayaCapitalController::class, 'KycInformation']);
     Route::post('/kyc-account-status', [NayaCapitalController::class, 'KycAccStatus']);
     Route::post('/make-order', [NayaCapitalController::class, 'MakeOrder']);
+    Route::post('/cancel-order', [NayaCapitalController::class, 'CancelOrder']);
+    Route::post('/modify-order', [NayaCapitalController::class, 'ModifyOrder']);
+    Route::post('/order-history', [NayaCapitalController::class, 'OrderHistory']);
+    Route::post('/transaction-history', [NayaCapitalController::class, 'TransactionHistory']);
+    Route::post('/asset-position-and-valuation', [NayaCapitalController::class, 'AssetPosition']);
+    Route::post('/verify-account-number', [NayaCapitalController::class, 'VerifyAccountNumber']);
+    Route::post('/current-market-data', [NayaCapitalController::class, 'CurrentMarketData']);
+    Route::post('/specific-market-data', [NayaCapitalController::class, 'SpecificMarketData']);
+    Route::post('/market-movers', [NayaCapitalController::class, 'MarketMovers']);
+    Route::post('/market-news', [NayaCapitalController::class, 'MarketNews']);
+    Route::post('/market-prices', [NayaCapitalController::class, 'MarketPrices']);
+    Route::post('/market-quotes', [NayaCapitalController::class, 'MarketQuotes']);
+    Route::post('/earnings-history', [NayaCapitalController::class, 'EarningsHistory']);
+    Route::post('/agency-trading-accounts', [NayaCapitalController::class, 'AgencyTradingAccounts']);
 });
 
 Route::prefix('survey')->group(function () {
