@@ -17,6 +17,9 @@ class CreateNayaCapitalsTable extends Migration
             $table->id();
             $table->foreignId('user_id')->constrained()->onDelete('cascade')->onUpdate('cascade');
             $table->string('exchange');
+            $table->string('genericPassThruParam');
+            $table->string('refCode');
+            $table->string('kycRefNo');
             $table->string('firstname');
             $table->string('lastname');
             $table->string('middlename')->nullable();
