@@ -14,7 +14,7 @@ class AddWebsiteToPensionFundAdminsTable extends Migration
     public function up()
     {
         Schema::table('pension_fund_admins', function (Blueprint $table) {
-            $table->string('website');
+            $table->string('website')->nullable();
         });
     }
 
