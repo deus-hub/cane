@@ -10,6 +10,7 @@ use App\Http\Controllers\NayaCapitalController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\PensionFundAdminController;
 use App\Http\Controllers\PercentageWithdrawalController;
+use App\Http\Controllers\PortfolioController;
 use App\Http\Controllers\YoaPensionController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
@@ -102,4 +103,12 @@ Route::prefix('survey')->group(function () {
     Route::get('/investment-income-reliance', [InvestmentRelianceController::class, 'index']);
     Route::get('/dipp-reaction', [DippReactionController::class, 'index']);
     Route::post('/answers', [InvestmentQuestionnaireController::class, 'index']);
+});
+
+Route::prefix('user')->middleware('auth:sanctum')->group(function () {
+    // DASHBOARD
+    Route::get('/total-investment', [PortfolioController::class, 'TotalInvestment']);
+    Route::get('/total-personal-finance', [PortfolioController::class, 'TotalPersonalFinance']);
+    Route::get('/total-loans', [PortfolioController::class, 'TotalLoans']);
+    Route::get('/total-portfolio', [PortfolioController::class, 'TotalPortfolio']);
 });
