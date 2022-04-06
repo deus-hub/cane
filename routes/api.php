@@ -112,3 +112,11 @@ Route::prefix('user')->middleware('auth:sanctum')->group(function () {
     Route::get('/total-loans', [PortfolioController::class, 'TotalLoans']);
     Route::get('/total-portfolio', [PortfolioController::class, 'TotalPortfolio']);
 });
+
+Route::prefix('dashboard')->middleware('auth:sanctum')->group(function () {
+    // DASHBOARD
+    Route::get('/crypto', [PortfolioController::class, 'Crypto']);
+    Route::get('/currency-pairs', [PortfolioController::class, 'CurrencyPairs']);
+    Route::get('/business-news', [PortfolioController::class, 'BusinessNews']);
+    Route::get('/indices-futures', [PortfolioController::class, 'IndicesFutures']);
+});
