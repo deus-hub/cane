@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Http;
 
 class PortfolioController extends Controller
@@ -78,17 +79,15 @@ class PortfolioController extends Controller
      */
     public function Crypto()
     {
-        //get active products
-        $response = Http::get('https://betconix.com/api/v1/all')
-            ->json();
-
-        return response()->json(
-            [
-                'status' => 'true',
-                'Response' => $response,
-            ],
-            200
-        );
+        return Cache::remember('CryptoData', now()->addDay(), function () {
+            return response()->json(
+                [
+                    'status' => 'true',
+                    'Response' => Http::get('https://betconix.com/api/v1/all')->json(),
+                ],
+                200
+            );
+        });
     }
 
     /**
@@ -98,17 +97,16 @@ class PortfolioController extends Controller
      */
     public function CurrencyPairs()
     {
-        //get active products
-        $response = Http::get('https://api.polygon.io/v2/aggs/grouped/locale/global/market/fx/2020-10-14?adjusted=true&apiKey=PBDLxN_aCH2W4pAFfaT0chyabOoF_Vmc')
-            ->json();
 
-        return response()->json(
-            [
-                'status' => 'true',
-                'Response' => $response,
-            ],
-            200
-        );
+        return Cache::remember('CurrencyPairs', now()->addDay(), function () {
+            return response()->json(
+                [
+                    'status' => 'true',
+                    'Response' => Http::get('https://api.polygon.io/v2/aggs/grouped/locale/global/market/fx/2020-10-14?adjusted=true&apiKey=PBDLxN_aCH2W4pAFfaT0chyabOoF_Vmc')->json(),
+                ],
+                200
+            );
+        });
     }
 
     /**
@@ -118,17 +116,17 @@ class PortfolioController extends Controller
      */
     public function BusinessNews()
     {
-        //get active products
-        $response = Http::get('https://newsapi.org/v2/everything?q=business&apiKey=390b5d1178b94e41bcb323b6ab21d84f')
-            ->json();
+        //get business news
 
-        return response()->json(
-            [
-                'status' => 'true',
-                'Response' => $response,
-            ],
-            200
-        );
+        return Cache::remember('BusinessNews', now()->addDay(), function () {
+            return response()->json(
+                [
+                    'status' => 'true',
+                    'Response' => Http::get('https://newsapi.org/v2/everything?q=business&apiKey=390b5d1178b94e41bcb323b6ab21d84f')->json(),
+                ],
+                200
+            );
+        });
     }
 
     /**
@@ -138,16 +136,27 @@ class PortfolioController extends Controller
      */
     public function IndicesFutures()
     {
-        //get active products
-        $response = Http::get('https://api.polygon.io/v2/aggs/grouped/locale/us/market/stocks/2020-10-14?adjusted=true&apiKey=PBDLxN_aCH2W4pAFfaT0chyabOoF_Vmc')
-            ->json();
+        //get indices and futures
 
-        return response()->json(
-            [
-                'status' => 'true',
-                'Response' => $response,
-            ],
-            200
-        );
+        return Cache::remember('IndicesFutures', now()->addDay(), function () {
+            return response()->json(
+                [
+                    'status' => 'true',
+                    'Response' => Http::get('https://api.polygon.io/v2/aggs/grouped/locale/us/market/stocks/2020-10-14?adjusted=true&apiKey=PBDLxN_aCH2W4pAFfaT0chyabOoF_Vmc')->json(),
+                ],
+                200
+            );
+        });
+
+        // $response = Http::get('https://api.polygon.io/v2/aggs/grouped/locale/us/market/stocks/2020-10-14?adjusted=true&apiKey=PBDLxN_aCH2W4pAFfaT0chyabOoF_Vmc')
+        //     ->json();
+
+        // return response()->json(
+        //     [
+        //         'status' => 'true',
+        //         'Response' => $response,
+        //     ],
+        //     200
+        // );
     }
 }

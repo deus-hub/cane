@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\BankController;
+use App\Http\Controllers\ContactController;
 use App\Http\Controllers\DippReactionController;
 use App\Http\Controllers\InitialWithdrawalController;
 use App\Http\Controllers\InvestmentObjectiveController;
@@ -34,6 +35,11 @@ Route::prefix('auth')->group(function () {
     Route::post('/send-reset-token', [UserController::class, 'SendResetToken']);
     Route::post('/reset-password', [UserController::class, 'ResetPassword']);
 });
+
+// Route::group(function () {
+//     Route::post('/contact-us', [ContactController::class, 'SendMail']);
+// });
+Route::post('/contact-us', [ContactController::class, 'SendMail']);
 
 Route::prefix('auth')->middleware('auth:sanctum')->group(function () {
     // PROFILE ROUTES
