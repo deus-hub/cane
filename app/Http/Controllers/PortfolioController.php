@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Investment;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Http;
@@ -15,10 +16,12 @@ class PortfolioController extends Controller
      */
     public function TotalInvestment()
     {
+        $userID = auth()->user()->id;
+        $response = Investment::where('user_id', $userID)->count();
         return response()->json(
             [
                 'status' => 'true',
-                'total_investment' => 0
+                'total_investment' => $response
             ],
             200
         );
@@ -63,10 +66,13 @@ class PortfolioController extends Controller
      */
     public function TotalPortfolio()
     {
+        $userID = auth()->user()->id;
+        $totalInvestment = Investment::where('user_id', $userID)->count();
+
         return response()->json(
             [
                 'status' => 'true',
-                'total_portfolio' => 0
+                'total_portfolio' => $totalInvestment
             ],
             200
         );

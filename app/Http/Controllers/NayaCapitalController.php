@@ -417,6 +417,12 @@ class NayaCapitalController extends Controller
         );
 
         if ($response->successful()) {
+            if ($response['errors'] == []) {
+                auth()->user()->investments()->create([
+                    'broker' => 'naya-capitals',
+                ]);
+            }
+
             return response()->json(
                 [
                     json_decode($response),
