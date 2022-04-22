@@ -508,12 +508,28 @@ class YoaPensionController extends Controller
                 $payload
             );
 
-        return response()->json(
-            [
-                'status' => 'true',
-                'Quote' => json_decode($quote),
-            ],
-            200
-        );
+        if ($quote) {
+            # commit to database
+            auth()->user()->insurance()->create([
+                'broker' => 'AIICO Insurance PLC',
+                'quote_number' => $fields['quote_number']
+            ]);
+
+            return response()->json(
+                [
+                    'status' => 'true',
+                    'Quote' => json_decode($quote),
+                ],
+                200
+            );
+        } else {
+            return response()->json(
+                [
+                    'status' => 'false',
+                    'message' => "unable to pay quote",
+                ],
+                500
+            );
+        }
     }
 }

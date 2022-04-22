@@ -40,4 +40,8 @@ return [
         'base_url' => env('NAYA_BASE_URL'),
     ],
 
+    'paystack' => [
+        'secret_key' => env('PAYSTACK_SECRET_KEY')
+    ],
+
 ];

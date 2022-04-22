@@ -8,6 +8,7 @@ use App\Http\Controllers\InvestmentObjectiveController;
 use App\Http\Controllers\InvestmentQuestionnaireController;
 use App\Http\Controllers\InvestmentRelianceController;
 use App\Http\Controllers\NayaCapitalController;
+use App\Http\Controllers\PaymentController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\PensionFundAdminController;
 use App\Http\Controllers\PercentageWithdrawalController;
@@ -117,6 +118,7 @@ Route::prefix('user')->middleware('auth:sanctum')->group(function () {
     Route::get('/total-personal-finance', [PortfolioController::class, 'TotalPersonalFinance']);
     Route::get('/total-loans', [PortfolioController::class, 'TotalLoans']);
     Route::get('/total-portfolio', [PortfolioController::class, 'TotalPortfolio']);
+    Route::get('/insurance', [PortfolioController::class, 'Insurance']);
 });
 
 Route::prefix('dashboard')->middleware('auth:sanctum')->group(function () {
@@ -125,4 +127,10 @@ Route::prefix('dashboard')->middleware('auth:sanctum')->group(function () {
     Route::get('/currency-pairs', [PortfolioController::class, 'CurrencyPairs']);
     Route::get('/business-news', [PortfolioController::class, 'BusinessNews']);
     Route::get('/indices-futures', [PortfolioController::class, 'IndicesFutures']);
+});
+
+Route::prefix('payment')->middleware('auth:sanctum')->group(function () {
+    // PAYSTACK PAYMENT
+    Route::post('/initialize', [PaymentController::class, 'InitializePaystackPayment']);
+    Route::get('/callback-url', [PaymentController::class, 'VerifyPaystackPayment']);
 });

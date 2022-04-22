@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Insurance;
 use App\Models\Investment;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Cache;
@@ -73,6 +74,25 @@ class PortfolioController extends Controller
             [
                 'status' => 'true',
                 'total_portfolio' => $totalInvestment
+            ],
+            200
+        );
+    }
+
+    /**
+     * Display a listing of the resource.
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function Insurance()
+    {
+        $userID = auth()->user()->id;
+        $totalInsurance = Insurance::where('user_id', $userID)->get();
+
+        return response()->json(
+            [
+                'status' => 'true',
+                'insurance_premiums' => $totalInsurance
             ],
             200
         );
