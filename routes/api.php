@@ -132,5 +132,10 @@ Route::prefix('dashboard')->middleware('auth:sanctum')->group(function () {
 Route::prefix('payment')->middleware('auth:sanctum')->group(function () {
     // PAYSTACK PAYMENT
     Route::post('/initialize', [PaymentController::class, 'InitializePaystackPayment']);
+    // Route::get('/callback-url', [PaymentController::class, 'VerifyPaystackPayment']);
+});
+
+Route::prefix('payment')->group(function () {
+    // PAYSTACK PAYMENT
     Route::get('/callback-url', [PaymentController::class, 'VerifyPaystackPayment']);
 });
