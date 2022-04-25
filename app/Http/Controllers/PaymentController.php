@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use App\Models\Payment;
 
 class PaymentController extends Controller
 {
@@ -20,45 +21,56 @@ class PaymentController extends Controller
             'reference'     => 'required|string'
         ]);
 
-        $url = "https://api.paystack.co/transaction/initialize";
-        $newReference = str_replace('/', '-', $inputFields['reference']);
+        // $url = "https://api.paystack.co/transaction/initialize";
+        // $newReference = str_replace('/', '-', $inputFields['reference']);
 
-        $fields = [
+        // $fields = [
+        //     'email'         => $inputFields['email'],
+        //     'amount'        => $inputFields['amount'] * 100,
+        //     'reference'     => $newReference,
+        // ];
+
+        $create_payment = auth()->user()->payments()->create([
             'email'         => $inputFields['email'],
-            'amount'        => $inputFields['amount'] * 100,
-            'reference'     => $newReference,
-            'callback_url'     => env("APP_URL") . "/api/payment/callback-url",
-        ];
-        // return $fields['callback_url'];
+            'amount'        => $inputFields['amount'],
+            'reference'     => $inputFields['reference'],
+            'status'        => 'pending',
+        ]);
 
-        $fields_string = http_build_query($fields);
-        $secretKey = config('services.paystack.secret_key');
+        // $fields_string = http_build_query($fields);
+        // $secretKey = config('services.paystack.secret_key');
 
         //open connection
-        $ch = curl_init();
+        // $ch = curl_init();
 
         //set the url, number of POST vars, POST data
-        curl_setopt($ch, CURLOPT_URL, $url);
-        curl_setopt($ch, CURLOPT_POST, true);
-        curl_setopt($ch, CURLOPT_POSTFIELDS, $fields_string);
-        curl_setopt($ch, CURLOPT_HTTPHEADER, array(
-            "Authorization: Bearer $secretKey",
-            "Cache-Control: no-cache",
-        ));
+        // curl_setopt($ch, CURLOPT_URL, $url);
+        // curl_setopt($ch, CURLOPT_POST, true);
+        // curl_setopt($ch, CURLOPT_POSTFIELDS, $fields_string);
+        // curl_setopt($ch, CURLOPT_HTTPHEADER, array(
+        //     "Authorization: Bearer $secretKey",
+        //     "Cache-Control: no-cache",
+        // ));
 
         //So that curl_exec returns the contents of the cURL; rather than echoing it
-        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+        // curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
 
         //execute post
-        $result = curl_exec($ch);
+        // $result = curl_exec($ch);
 
-        if ($result) {
-            return $result;
+        if ($create_payment) {
+            return response()->json(
+                [
+                    'status' => 'true',
+                    'response' => 'success',
+                ],
+                200
+            );
         } else {
             return response()->json(
                 [
                     'status' => 'false',
-                    'response' => 'error fetching url',
+                    'response' => 'error initiating payment',
                 ],
                 500
             );
@@ -72,38 +84,54 @@ class PaymentController extends Controller
      */
     public function VerifyPaystackPayment(Request $request)
     {
-        if ($request->has('reference')) {
-            $reference = $request->input('reference');
-        }
+        if ($request->response->data->status === 'success') {
+            $amount = $request->response->data->amount;
+            $reference = $request->response->data->reference;
 
-        $secretKey = config('services.paystack.secret_key');
-
-        $curl = curl_init();
-        curl_setopt_array($curl, array(
-
-            CURLOPT_URL => "https://api.paystack.co/transaction/verify/$reference",
-            CURLOPT_RETURNTRANSFER => true,
-            CURLOPT_ENCODING => "",
-            CURLOPT_MAXREDIRS => 10,
-            CURLOPT_TIMEOUT => 30,
-            CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
-            CURLOPT_CUSTOMREQUEST => "GET",
-            CURLOPT_HTTPHEADER => array(
-                "Authorization: Bearer $secretKey",
-                "Cache-Control: no-cache",
-            ),
-
-        ));
-
-        $response = curl_exec($curl);
-        $err = curl_error($curl);
-        curl_close($curl);
-
-        if ($err) {
-            return "cURL Error #:" . $err;
+            Payment::where(['amount' => $amount, 'reference' => $reference])->update([
+                'status' => 'successful',
+            ]);
         } else {
-            return $response;
+            $amount = $request->response->data->amount;
+            $reference = $request->response->data->reference;
+
+            Payment::where(['amount' => $amount, 'reference' => $reference])->update([
+                'status' => 'failed',
+            ]);
         }
+
+        // if ($request->has('reference')) {
+        //     $reference = $request->input('reference');
+        // }
+
+        // $secretKey = config('services.paystack.secret_key');
+
+        // $curl = curl_init();
+        // curl_setopt_array($curl, array(
+
+        //     CURLOPT_URL => "https://api.paystack.co/transaction/verify/$reference",
+        //     CURLOPT_RETURNTRANSFER => true,
+        //     CURLOPT_ENCODING => "",
+        //     CURLOPT_MAXREDIRS => 10,
+        //     CURLOPT_TIMEOUT => 30,
+        //     CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
+        //     CURLOPT_CUSTOMREQUEST => "GET",
+        //     CURLOPT_HTTPHEADER => array(
+        //         "Authorization: Bearer $secretKey",
+        //         "Cache-Control: no-cache",
+        //     ),
+
+        // ));
+
+        // $response = curl_exec($curl);
+        // $err = curl_error($curl);
+        // curl_close($curl);
+
+        // if ($err) {
+        //     return "cURL Error #:" . $err;
+        // } else {
+        //     return $response;
+        // }
         // echo $reference;
     }
 

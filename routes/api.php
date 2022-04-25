@@ -137,5 +137,5 @@ Route::prefix('payment')->middleware('auth:sanctum')->group(function () {
 
 Route::prefix('payment')->group(function () {
     // PAYSTACK PAYMENT
-    Route::get('/callback-url', [PaymentController::class, 'VerifyPaystackPayment']);
+    Route::post('/callback-url', [PaymentController::class, 'VerifyPaystackPayment']);
 });
