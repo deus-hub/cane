@@ -27,7 +27,7 @@ class PaymentController extends Controller
             'email'         => $inputFields['email'],
             'amount'        => $inputFields['amount'] * 100,
             'reference'     => $newReference,
-            'callback_url'     => env("APP_URL") . "/api/payment/callback-url",
+            // 'callback_url'     => env("APP_URL") . "/api/payment/callback-url",
         ];
         // return $fields['callback_url'];
 
