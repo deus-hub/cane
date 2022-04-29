@@ -54,7 +54,7 @@ class PaymentController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function VerifyPaystackPayment()
+    public function VerifyPaystackPayment(Request $request)
     {
         // if ($request->response->data->status === 'success') {
         //     $amount = $request->response->data->amount;
@@ -89,6 +89,13 @@ class PaymentController extends Controller
         switch ($event->event) {
             case 'charge.success':
                 //your logic
+                $reference = $request->input('data.reference');
+                $amount = $request->input('data.amount');
+
+                Payment::where(['amount' => $amount, 'reference' => $reference])->update([
+                    'status' => 'successful',
+                ]);
+
                 Log::info($event);
                 break;
         }
