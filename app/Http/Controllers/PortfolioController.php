@@ -69,11 +69,34 @@ class PortfolioController extends Controller
     {
         $userID = auth()->user()->id;
         $totalInvestment = Investment::where('user_id', $userID)->count();
+        $totalInsurance = Insurance::where('user_id', $userID)->count();
+
+        $totalPortfolio = $totalInvestment + $totalInsurance;
 
         return response()->json(
             [
                 'status' => 'true',
-                'total_portfolio' => $totalInvestment
+                'total_portfolio' => $totalPortfolio
+            ],
+            200
+        );
+    }
+
+    /**
+     * Display a listing of the resource.
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function UserPortfolio()
+    {
+        $userID = auth()->user()->id;
+        $data['Investments'] = Investment::where('user_id', $userID)->orderBy('updated_at', 'DESC')->get();
+        $data['Insurances'] = Insurance::where('user_id', $userID)->orderBy('updated_at', 'DESC')->get();
+
+        return response()->json(
+            [
+                'status' => 'true',
+                'total_portfolio' => $data
             ],
             200
         );
