@@ -59,7 +59,7 @@ Route::prefix('bank')->middleware('auth:sanctum')->group(function () {
     Route::get('/delete/{id}', [BankController::class, 'destroy']);
 });
 
-Route::prefix('pfa')->middleware('auth:sanctum')->group(function () {
+Route::prefix('pfa')->group(function () {
     // PFA CRUD
     Route::get('/all', [PensionFundAdminController::class, 'index']);
     Route::post('/add', [PensionFundAdminController::class, 'store']);
