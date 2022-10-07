@@ -23,17 +23,28 @@ class YoaPensionController extends Controller
         $activeProducts = Http::withHeaders([
             'UserIdentity' => config('services.yoa.token'),
             'Accept' => 'Application/json',
-        ])
-            ->get(config('services.yoa.base_url') . '/api/Integration/GetActiveProducts')
-            ->json();
+            'ContentType' => 'Application/json',
+        ])->get(config('services.yoa.base_url') . '/api/Integration/GetActiveProducts');
 
-        return response()->json(
-            [
-                'status' => 'true',
-                'ActiveProducts' => $activeProducts,
-            ],
-            200
-        );
+        $response = json_decode($activeProducts);
+
+        if ($response) {
+            return response()->json(
+                [
+                    'status' => 'true',
+                    'ActiveProducts' => $response,
+                ],
+                200
+            );
+        } else {
+            return response()->json(
+                [
+                    'status' => 'false',
+                    'ActiveProducts' => "unable to get products",
+                ],
+                500
+            );
+        }
     }
 
     /**
@@ -47,17 +58,27 @@ class YoaPensionController extends Controller
         $productDetails = Http::withHeaders([
             'UserIdentity' => config('services.yoa.token'),
             'Accept' => 'Application/json',
-        ])
-            ->get(config('services.yoa.base_url') . '/api/Integration/GetQuoteStatus?quoteNumber=' . $quoteNumber)
-            ->json();
+        ])->get(config('services.yoa.base_url') . '/api/Integration/GetQuoteStatus?quoteNumber=' . $quoteNumber);
 
-        return response()->json(
-            [
-                'status' => 'true',
-                'ProductDetails' => $productDetails,
-            ],
-            200
-        );
+        $response = json_decode($productDetails);
+
+        if ($response) {
+            return response()->json(
+                [
+                    'status' => 'true',
+                    'ProductDetails' => $response,
+                ],
+                200
+            );
+        } else {
+            return response()->json(
+                [
+                    'status' => 'false',
+                    'ProductDetails' => "unable to get ProductDetails",
+                ],
+                500
+            );
+        }
     }
 
     /**
@@ -502,15 +523,16 @@ class YoaPensionController extends Controller
             'UserIdentity' => config('services.yoa.token'),
             'Accept' => 'Application/json',
             'Content-Type' => 'Application/json',
-        ])
-            ->post(
-                config('services.yoa.base_url') . '/api/Integration/PayQuote',
-                $payload
-            );
+        ])->post(
+            config('services.yoa.base_url') . '/api/Integration/PayQuote',
+            $payload
+        );
 
-        if ($quote) {
+        $quote = json_decode($quote);
+
+        if ($quote === 'Success') {
             # commit to database
-            auth()->user()->insurance()->create([
+            auth()->user()->insurances()->create([
                 'broker' => 'AIICO Insurance PLC',
                 'quote_number' => $fields['quote_number']
             ]);
@@ -518,7 +540,7 @@ class YoaPensionController extends Controller
             return response()->json(
                 [
                     'status' => 'true',
-                    'Quote' => json_decode($quote),
+                    'Quote' => $quote,
                 ],
                 200
             );
@@ -526,7 +548,7 @@ class YoaPensionController extends Controller
             return response()->json(
                 [
                     'status' => 'false',
-                    'message' => "unable to pay quote",
+                    'message' => $quote,
                 ],
                 500
             );
